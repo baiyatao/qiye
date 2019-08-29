@@ -7,6 +7,7 @@ class Index extends Base
 {
     public function index()
     {
-        return '<h1>当前状态开启</h1>';
+//        return '<h1>当前状态开启</h1>';
+        return phpinfo();
     }
 }

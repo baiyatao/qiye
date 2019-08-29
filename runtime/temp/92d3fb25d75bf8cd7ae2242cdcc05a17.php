@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:72:"E:\www\qiye\public/../application/admin\view\category\category_list.html";i:1566480801;s:53:"E:\www\qiye\application\admin\view\public\header.html";i:1566114787;s:54:"E:\www\qiye\application\admin\view\public\base_js.html";i:1566470892;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:72:"E:\www\qiye\public/../application/admin\view\category\category_list.html";i:1567059251;s:53:"E:\www\qiye\application\admin\view\public\header.html";i:1566114787;s:54:"E:\www\qiye\application\admin\view\public\base_js.html";i:1566470892;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,7 +28,7 @@
             <form class="layui-form x-center" action="" style="width:50%">
                 <div class="layui-form-pane" style="margin-top: 15px;">
                   <div class="layui-form-item">
-                    <label class="layui-form-label" style="width:60px">所属分类</label>
+                    <label class="layui-form-label" style="width:100px">所属分类</label>
                     <div class="layui-input-inline" style="width:120px;text-align: left">
                         <select name="pid">
                             <option value="0">顶级分类</option>
@@ -87,7 +87,7 @@
                             class="ml-5" style="text-decoration:none">
                                 <i class="layui-icon">&#xe642;</i>
                             </a>
-                            <a title="删除" href="javascript:;" onclick="cate_del(this,'1')" 
+                            <a title="删除" href="javascript:;" onclick="cate_del(this,'<?php echo $vo['id']; ?>')"
                             style="text-decoration:none">
                                 <i class="layui-icon">&#xe640;</i>
                             </a>
@@ -122,7 +122,7 @@
                       if(res.status ==1){
                           layer.alert(res.message,{icon:6});
                           //layer.alert(res.message,{icon:6});
-                          $('#x-link').prepend('<tr><td><input type="checkbox"value="1"name=""></td><td>'+res.res.id+'</td><td>'+res.res.cate_order+'</td><td>'+res.res.cate_name+'</td><td class="td-manage"><a title="编辑"href="javascript:;"onclick="cate_edit(\'编辑\',\'edit.html?id='+res.res.id+'\',\'4\',\'\',\'510\')"class="ml-5"style="text-decoration:none"><i class="layui-icon">&#xe642;</i></a><a title="删除"href="javascript:;"onclick="cate_del(this,\'1\')"style="text-decoration:none"><i class="layui-icon">&#xe640;</i></a></td></tr>');
+                          $('#x-link').prepend('<tr><td><input type="checkbox"value="1"name=""></td><td>'+res.res.id+'</td><td>'+res.res.cate_order+'</td><td>'+res.res.cate_name+'</td><td class="td-manage"><a title="编辑"href="javascript:;"onclick="cate_edit(\'编辑\',\'edit.html?id='+res.res.id+'\',\'4\',\'\',\'510\')"class="ml-5"style="text-decoration:none"><i class="layui-icon">&#xe642;</i></a><a title="删除"href="javascript:;"onclick="cate_del(this,'+res.res.id+')"style="text-decoration:none"><i class="layui-icon">&#xe640;</i></a></td></tr>');
                       }else{
                           layer.alert(res.message,{icon:6});
                       }
@@ -152,8 +152,11 @@
            
             /*-删除*/
             function cate_del(obj,id){
+
                 layer.confirm('确认要删除吗？',function(index){
                     //发异步删除数据
+
+                    $.get("<?php echo url('delete'); ?>",{id:id});
                     $(obj).parents("tr").remove();
                     layer.msg('已删除!',{icon:1,time:1000});
                 });

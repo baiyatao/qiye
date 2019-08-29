@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:68:"E:\www\qiye\public/../application/admin\view\banner\banner_list.html";i:1566116610;s:53:"E:\www\qiye\application\admin\view\public\header.html";i:1566114787;s:54:"E:\www\qiye\application\admin\view\public\base_js.html";i:1566267558;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:68:"E:\www\qiye\public/../application/admin\view\banner\banner_list.html";i:1567064395;s:53:"E:\www\qiye\application\admin\view\public\header.html";i:1566114787;s:54:"E:\www\qiye\application\admin\view\public\base_js.html";i:1566470892;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,9 +25,10 @@
             <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
         </div>
         <div class="x-body">
-            <xblock><button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button><button class="layui-btn" onclick="banner_add('添加用户','banner-add.html','600','500')"><i class="layui-icon">&#xe608;</i>添加</button><span class="x-right" style="line-height:40px">共有数据：88 条</span></xblock>
+            <xblock><button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button><button class="layui-btn" onclick="banner_add('添加用户','<?php echo url('add'); ?>','600','500')"><i class="layui-icon">&#xe608;</i>添加</button><span class="x-right" style="line-height:40px">共有数据：<?php echo $count; ?> 条</span></xblock>
             <table class="layui-table">
                 <thead>
+
                     <tr>
                         <th>
                             <input type="checkbox" name="" value="">
@@ -53,21 +54,22 @@
                     </tr>
                 </thead>
                 <tbody id="x-img">
+                <?php if(is_array($banner) || $banner instanceof \think\Collection || $banner instanceof \think\Paginator): $i = 0; $__LIST__ = $banner;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
                     <tr>
                         <td>
                             <input type="checkbox" value="1" name="">
                         </td>
                         <td>
-                            1
+                            <?php echo $vo['id']; ?>
                         </td>
                         <td>
-                            <img  src="./images/banner.png" width="200" alt="">点击图片试试
+                            <img  src="/uploads/<?php echo $vo['image']; ?>" width="200" alt="">点击图片试试
                         </td>
                         <td >
-                            http://www.xuebingsi.com
+                            <?php echo $vo['link']; ?>
                         </td>
                         <td >
-                            十月活动轮播
+                            <?php echo $vo['desc']; ?>
                         </td>
                         <td class="td-status">
                             <span class="layui-btn layui-btn-normal layui-btn-mini">
@@ -78,17 +80,19 @@
                             <a style="text-decoration:none" onclick="banner_stop(this,'10001')" href="javascript:;" title="不显示">
                                 <i class="layui-icon">&#xe601;</i>
                             </a>
-                            <a title="编辑" href="javascript:;" onclick="banner_edit('编辑','banner-edit.html','4','','510')"
+                            <a title="编辑" href="javascript:;" onclick="banner_edit('编辑','<?php echo url('edit'); ?>?id='+<?php echo $vo['id']; ?>,'4','','510')"
                             class="ml-5" style="text-decoration:none">
                                 <i class="layui-icon">&#xe642;</i>
                             </a>
-                            <a title="删除" href="javascript:;" onclick="banner_del(this,'1')" 
+                            <a title="删除" href="javascript:;" onclick="banner_del(this,'<?php echo $vo['id']; ?>')"
                             style="text-decoration:none">
                                 <i class="layui-icon">&#xe640;</i>
                             </a>
                         </td>
                     </tr>
+                <?php endforeach; endif; else: echo "" ;endif; ?>
                 </tbody>
+
             </table>
 
             <div id="page"></div>
@@ -97,6 +101,10 @@
 <script src="/static/admin/js/x-admin.js"></script>
 <script src="/static/admin/js/jquery.min.js"></script>
 <script src="/static/admin/js/x-layui.js" charset="utf-8"></script>
+
+<!--引入bootstrap-->
+<link rel="stylesheet" type="text/css" href="/static/admin/lib/bootstrap/css/bootstrap.css" />
+<script type="text/javascript" src="/static/admin/lib/bootstrap/js/bootstrap.js"></script>
         <script>
             layui.use(['laydate','element','laypage','layer'], function(){
                 $ = layui.jquery;//jquery
@@ -156,6 +164,7 @@
             function banner_del(obj,id){
                 layer.confirm('确认要删除吗？',function(index){
                     //发异步删除数据
+                    $.get("<?php echo url('delete'); ?>",{id:id});
                     $(obj).parents("tr").remove();
                     layer.msg('已删除!',{icon:1,time:1000});
                 });

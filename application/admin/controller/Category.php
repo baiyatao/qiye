@@ -2,7 +2,9 @@
 namespace app\admin\controller;
 use app\admin\model\Category as CategoryModel;
 use app\admin\common\Base;
+use http\Params;
 use think\Request;
+use think\Session;
 
 class Category extends Base
 {
@@ -41,7 +43,44 @@ class Category extends Base
         //5.渲染模板
         return $this->view->fetch('cate_edit');
     }
+    public function update(Request $request){
+        //1.获取一下提交数据
+        $data = $request->param();
+
+        //2.更新操作
+        $res = CategoryModel::update([
+            'cate_name'=>$data['cate_name'],
+            'cate_order'=>$data['cate_order'],
+            'pid'=>$data['pid'],
+        ],['id'=>$data['id']]);
+
+        $status = 1;
+        $message = '更新成功!';
+
+        //3.如果没有成功
+        if(is_null($res)){
+            $status = 0;
+            $message = '更新失败！';
+        }
+        return ['status'=>$status,'message'=>$message];
+    }
+    public function delete($id)
+    {
+        //1.删除以当前ID为父ID的所有子分类，注{只能删除一层子分类，需要调整}
+        CategoryModel::destroy(function ($query) use ($id){
+            $query->where(['pid'=>$id])->field('id');
+        });
+
+        //2.删除当前分类
+        CategoryModel::destroy($id);
+
+
+    }
     public function create(Request $request){
+        //获取一下提交的数据
+        $data = $request->param();
+
+
         //设置返回值
         $status =1;
         $message = '添加成功!';

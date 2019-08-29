@@ -3,13 +3,13 @@
         <div class="x-body">
             <form class="layui-form">
                 <div class="layui-form-item">
-                    <label for="cname" class="layui-form-label">
+                    <label for="cid" class="layui-form-label">
                         ID
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="id" name="id" required="" lay-verify="required"
-                        autocomplete="off"  value="{$cate_now.id}" disabled="" class="layui-input">
+                        <input type="text" id="cid" name="cid" required=""  value="{$cate_now.id}" disabled="" class="layui-input">
                     </div>
+                    <input type="hidden" id="id" name="id" value="{$cate_now.id}">
                 </div>
                 <div class="layui-form-item">
                     <label for="cname" class="layui-form-label">
@@ -21,9 +21,18 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label for="cname" class="layui-form-label">
+                        <span class="x-red">*</span>排序
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="cate_order" name="cate_order" required="" lay-verify="required"
+                               autocomplete="off" class="layui-input" value="{$cate_now.cate_order}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <label class="layui-form-label">所属分类</label>
                     <div class="layui-input-inline" >
-                        <select name="fid">
+                        <select name="pid">
                             <option value="0">顶级分类</option>
                             {volist name='cate_level' id='vo'}
                                 {eq name='$cate_now.pid' value='$vo.id'}
@@ -39,7 +48,7 @@
                 <div class="layui-form-item">
                     <label for="L_repass" class="layui-form-label">
                     </label>
-                    <button  class="layui-btn" lay-filter="save" lay-submit="">
+                    <button  class="layui-btn" lay-filter="save" lay-submit="" id="subbtn">
                         保存
                     </button>
                 </div>
@@ -53,21 +62,31 @@
               ,layer = layui.layer;
             
 
-              //监听提交
-              form.on('submit(save)', function(data){
-                console.log(data);
-                //发异步，把数据提交给php
-                layer.alert("保存成功", {icon: 6},function () {
-                    // 获得frame索引
-                    var index = parent.layer.getFrameIndex(window.name);
-                    //关闭当前frame
-                    parent.layer.close(index);
-                });
-                return false;
-              });
+
               
               
             });
+        </script>
+        <script>
+            $(function(){
+                $("#subbtn").on('click',function(){
+                    $.ajax({
+                        type:'POST',
+                        url:"{:url('category/update')}",
+                        data:$(".layui-form").serialize(),
+                        dataType:"json",
+                        success:function(data){
+                            if(data.status == 1){
+                                alert(data.message);
+                                // window.location.href = "{:url('index/index')}";
+                            }else{
+                                alert(data.message);
+                                // window.location.href = "{:url('login/index')}";
+                            }
+                        }
+                    })
+                })
+            })
         </script>
 
     </body>

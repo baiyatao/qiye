@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:68:"E:\www\qiye\public/../application/admin\view\category\cate_edit.html";i:1566479981;s:53:"E:\www\qiye\application\admin\view\public\header.html";i:1566114787;s:54:"E:\www\qiye\application\admin\view\public\base_js.html";i:1566470892;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:68:"E:\www\qiye\public/../application/admin\view\category\cate_edit.html";i:1566877801;s:53:"E:\www\qiye\application\admin\view\public\header.html";i:1566114787;s:54:"E:\www\qiye\application\admin\view\public\base_js.html";i:1566470892;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,13 +19,13 @@
         <div class="x-body">
             <form class="layui-form">
                 <div class="layui-form-item">
-                    <label for="cname" class="layui-form-label">
+                    <label for="cid" class="layui-form-label">
                         ID
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="id" name="id" required="" lay-verify="required"
-                        autocomplete="off"  value="<?php echo $cate_now['id']; ?>" disabled="" class="layui-input">
+                        <input type="text" id="cid" name="cid" required=""  value="<?php echo $cate_now['id']; ?>" disabled="" class="layui-input">
                     </div>
+                    <input type="hidden" id="id" name="id" value="<?php echo $cate_now['id']; ?>">
                 </div>
                 <div class="layui-form-item">
                     <label for="cname" class="layui-form-label">
@@ -37,9 +37,18 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label for="cname" class="layui-form-label">
+                        <span class="x-red">*</span>排序
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="cate_order" name="cate_order" required="" lay-verify="required"
+                               autocomplete="off" class="layui-input" value="<?php echo $cate_now['cate_order']; ?>">
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <label class="layui-form-label">所属分类</label>
                     <div class="layui-input-inline" >
-                        <select name="fid">
+                        <select name="pid">
                             <option value="0">顶级分类</option>
                             <?php if(is_array($cate_level) || $cate_level instanceof \think\Collection || $cate_level instanceof \think\Paginator): $i = 0; $__LIST__ = $cate_level;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;if($cate_now['pid'] == $vo['id']): ?>
                                     <option value="<?php echo $vo['id']; ?>" selected><?php echo $vo['cate_name']; ?></option>
@@ -53,7 +62,7 @@
                 <div class="layui-form-item">
                     <label for="L_repass" class="layui-form-label">
                     </label>
-                    <button  class="layui-btn" lay-filter="save" lay-submit="">
+                    <button  class="layui-btn" lay-filter="save" lay-submit="" id="subbtn">
                         保存
                     </button>
                 </div>
@@ -74,21 +83,31 @@
               ,layer = layui.layer;
             
 
-              //监听提交
-              form.on('submit(save)', function(data){
-                console.log(data);
-                //发异步，把数据提交给php
-                layer.alert("保存成功", {icon: 6},function () {
-                    // 获得frame索引
-                    var index = parent.layer.getFrameIndex(window.name);
-                    //关闭当前frame
-                    parent.layer.close(index);
-                });
-                return false;
-              });
+
               
               
             });
+        </script>
+        <script>
+            $(function(){
+                $("#subbtn").on('click',function(){
+                    $.ajax({
+                        type:'POST',
+                        url:"<?php echo url('category/update'); ?>",
+                        data:$(".layui-form").serialize(),
+                        dataType:"json",
+                        success:function(data){
+                            if(data.status == 1){
+                                alert(data.message);
+                                // window.location.href = "<?php echo url('index/index'); ?>";
+                            }else{
+                                alert(data.message);
+                                // window.location.href = "<?php echo url('login/index'); ?>";
+                            }
+                        }
+                    })
+                })
+            })
         </script>
 
     </body>

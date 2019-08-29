@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:66:"E:\www\qiye\public/../application/admin\view\admin\admin_edit.html";i:1566365602;s:53:"E:\www\qiye\application\admin\view\public\header.html";i:1566114787;s:54:"E:\www\qiye\application\admin\view\public\base_js.html";i:1566267558;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:66:"E:\www\qiye\public/../application/admin\view\admin\admin_edit.html";i:1566365602;s:53:"E:\www\qiye\application\admin\view\public\header.html";i:1566114787;s:54:"E:\www\qiye\application\admin\view\public\base_js.html";i:1566470892;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -72,6 +72,10 @@
 <script src="/static/admin/js/x-admin.js"></script>
 <script src="/static/admin/js/jquery.min.js"></script>
 <script src="/static/admin/js/x-layui.js" charset="utf-8"></script>
+
+<!--引入bootstrap-->
+<link rel="stylesheet" type="text/css" href="/static/admin/lib/bootstrap/css/bootstrap.css" />
+<script type="text/javascript" src="/static/admin/lib/bootstrap/js/bootstrap.js"></script>
 
 
 

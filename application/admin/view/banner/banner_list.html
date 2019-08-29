@@ -9,9 +9,10 @@
             <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
         </div>
         <div class="x-body">
-            <xblock><button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button><button class="layui-btn" onclick="banner_add('添加用户','banner-add.html','600','500')"><i class="layui-icon">&#xe608;</i>添加</button><span class="x-right" style="line-height:40px">共有数据：88 条</span></xblock>
+            <xblock><button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button><button class="layui-btn" onclick="banner_add('添加用户','{:url('add')}','600','500')"><i class="layui-icon">&#xe608;</i>添加</button><span class="x-right" style="line-height:40px">共有数据：{$count} 条</span></xblock>
             <table class="layui-table">
                 <thead>
+
                     <tr>
                         <th>
                             <input type="checkbox" name="" value="">
@@ -37,21 +38,22 @@
                     </tr>
                 </thead>
                 <tbody id="x-img">
+                {volist name="banner" id="vo"}
                     <tr>
                         <td>
                             <input type="checkbox" value="1" name="">
                         </td>
                         <td>
-                            1
+                            {$vo.id}
                         </td>
                         <td>
-                            <img  src="./images/banner.png" width="200" alt="">点击图片试试
+                            <img  src="__ROOT__/uploads/{$vo.image}" width="200" alt="">点击图片试试
                         </td>
                         <td >
-                            http://www.xuebingsi.com
+                            {$vo.link}
                         </td>
                         <td >
-                            十月活动轮播
+                            {$vo.desc}
                         </td>
                         <td class="td-status">
                             <span class="layui-btn layui-btn-normal layui-btn-mini">
@@ -62,17 +64,19 @@
                             <a style="text-decoration:none" onclick="banner_stop(this,'10001')" href="javascript:;" title="不显示">
                                 <i class="layui-icon">&#xe601;</i>
                             </a>
-                            <a title="编辑" href="javascript:;" onclick="banner_edit('编辑','banner-edit.html','4','','510')"
+                            <a title="编辑" href="javascript:;" onclick="banner_edit('编辑','{:url('edit')}?id='+{$vo.id},'4','','510')"
                             class="ml-5" style="text-decoration:none">
                                 <i class="layui-icon">&#xe642;</i>
                             </a>
-                            <a title="删除" href="javascript:;" onclick="banner_del(this,'1')" 
+                            <a title="删除" href="javascript:;" onclick="banner_del(this,'{$vo.id}')"
                             style="text-decoration:none">
                                 <i class="layui-icon">&#xe640;</i>
                             </a>
                         </td>
                     </tr>
+                {/volist}
                 </tbody>
+
             </table>
 
             <div id="page"></div>
@@ -137,6 +141,7 @@
             function banner_del(obj,id){
                 layer.confirm('确认要删除吗？',function(index){
                     //发异步删除数据
+                    $.get("{:url('delete')}",{id:id});
                     $(obj).parents("tr").remove();
                     layer.msg('已删除!',{icon:1,time:1000});
                 });
